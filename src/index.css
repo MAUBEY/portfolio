@@ -1,7 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Aldrich&family=Inter:wght@300;400;500&family=Inter+Tight:wght@300;400;500;600&family=Jost:wght@300;400;500;600&family=Rajdhani:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap");
-@import "tailwindcss";
+/* Fonts are loaded from index.html (<link>), not @import, so they no longer block CSS parsing. */
+
+/* Minimal reset (replaces the Tailwind preflight this project was implicitly relying on) */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid; }
+html { line-height: 1.5; -webkit-text-size-adjust: 100%; }
+h1, h2, h3, h4 { font-size: inherit; font-weight: inherit; }
+img, svg { display: block; vertical-align: middle; }
+img { max-width: 100%; height: auto; }
 
 :root {
+  --paper: #151512;
+  --ink: #f4f3ee;
+  --accent-global: #d6ff32;
   font-synthesis: none;
   --rgb-r-y: 0px; --rgb-r-b: 0px; 
   --rgb-y-y: 0px; --rgb-y-b: 0px; 
@@ -11,13 +20,10 @@
   --grid-parallax-y: 0px;
 }
 
-* { box-sizing: border-box; }
-
 html, body {
   margin: 0;
   min-width: 320px;
-  background-color: #151512;
-  background: var(--paper, #151512); 
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body, "Inter", sans-serif); 
   font-weight: 300; 
@@ -53,7 +59,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 /* =========================================
    CUSTOM GSAP PRELOADER
    ========================================= */
-.splash { position: fixed; z-index: 100; top: 0; left: 0; right: 0; height: 100vh; background: var(--paper, #151512); display: flex; align-items: center; justify-content: center; color: var(--ink); }
+.splash { position: fixed; z-index: 100; top: 0; left: 0; right: 0; height: 100vh; height: 100dvh; background: var(--paper); display: flex; align-items: center; justify-content: center; color: var(--ink); }
 .splash-progress { position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: #ffffff; transform-origin: left; transform: scaleX(0); will-change: transform, box-shadow; }
 .splash-center { display: flex; align-items: flex-end; }
 .counter-wrap { display: flex; height: clamp(4rem, 10vw, 12rem); overflow: hidden; font-weight: 500; font-size: clamp(4rem, 10vw, 12rem); line-height: 1; font-family: var(--font-title); }
@@ -115,14 +121,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 /* =========================================
    WORK SECTION
    ========================================= */
-.work { padding: 100px 12vw 80px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+.work { padding: 100px 12vw 80px; height: 100vh; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
 .work .section-intro { display: grid; grid-template-columns: 14vw 1fr auto; align-items: end; margin-bottom: 20px; position: relative; z-index: 10; }
 .work .section-intro h2 { margin: 0; font-weight: 700; font-size: clamp(3.5rem, 7.2vw, 7rem); line-height: 0.9; text-transform: none; letter-spacing: -0.1em; }
 .work .section-intro p { margin: 0; line-height: 1.5; text-align: right; }
 
 .project-list { position: relative; flex-grow: 1; width: 100%; }
-.project-card { outline: none; position: absolute; inset: 0; padding: 20px 0; cursor: pointer; border: none !important; }
-.project-card:last-child { border-bottom: 1px solid #333330; }
+.project-card { outline: none; position: absolute; inset: 0; padding: 20px 0; cursor: pointer; }
 .project-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
 .project-meta { display: grid; grid-template-columns: 14vw 1fr auto; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: #b5b4ad; position: relative; z-index: 10; }
 .project-stage { min-height: 610px; height: 100%; position: relative; display: grid; place-items: center; perspective: 1000px; }
@@ -229,7 +234,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
   letter-spacing: -0.04em;
 }
 
+.c-video { display: grid; place-items: center; background: #111; font-size: 30px; color: #fff; }
+
 .project-hint { color: #777770; text-align: right; text-transform: uppercase; font-size: 9px; letter-spacing: 0.13em; }
+.hint-touch { display: none; }
 
 /* =========================================
    SERVICES / EXPERTISE
@@ -291,6 +299,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .contact-copy h2 em { font-family: Georgia, serif; font-weight: 400; letter-spacing: 0; }
 .email-link { width: fit-content; display: flex; align-items: center; gap: 18px; font-size: clamp(18px, 2vw, 28px); border-bottom: 2px solid; padding-bottom: 8px; margin-bottom: 65px; }
 .email-link svg { width: 25px; }
+.resume-foot a svg { width: 18px; }
 .socials { display: flex; gap: 30px; font-size: 12px; }
 
 /* =========================================
@@ -301,7 +310,6 @@ footer span:nth-child(2) { text-align: center; }
 footer a { text-align: right; }
 
 @keyframes pulse { 50% { box-shadow: 0 0 0 5px #55bc5630; } }
-@keyframes orbit { to { transform: rotate(360deg); } }
 
 /* =========================================
    MEDIA QUERIES 
@@ -321,13 +329,18 @@ footer a { text-align: right; }
   .service-column { border-right: none; border-bottom: 1px solid rgba(255, 255, 255, 0.15); min-height: 400px; padding: 30px 10px; }
   .service-column:last-child { border-bottom: none; }
 
-  .work, .resume, .contact { padding: 70px 20px; }
+  .resume, .contact { padding: 70px 20px; }
+  .work { padding: 70px 20px 24px; }
   .section-intro { grid-template-columns: auto 1fr; gap: 24px; }
   .work .section-intro p { display: none; }
   .section-intro h2 { font-size: 3.2rem; }
 
-  .project-card { min-height: 620px; }
-  .project-stage { min-height: 540px; }
+  /* The pinned section is exactly one screen tall, so the card must fit it instead of forcing a fixed height. */
+  .project-card { display: flex; flex-direction: column; padding: 12px 0 0; }
+  .project-stage { flex: 1; min-height: 0; height: auto; }
+  .project-carousel { top: 6%; bottom: 6%; }
+  .c-img-landscape, .c-img-portrait { height: 50vh; height: 50dvh; }
+  .c-text { width: min(380px, 78vw); }
   .project-meta { grid-template-columns: 55px 1fr auto; }
   .project-title { font-size: clamp(4rem, 21vw, 7rem); }
   .project-object-wrap { width: 260px; height: 260px; }
@@ -349,6 +362,14 @@ footer a { text-align: right; }
 
   footer { padding: 28px 20px; grid-template-columns: 1fr 1fr; gap: 20px; }
   footer span:nth-child(2) { display: none; }
+}
+
+/* Touch devices: while the project slider owns the gesture, freeze native scrolling.
+   preventDefault alone can't stop momentum that is already running, which let a hard flick skip the whole section. */
+@media (hover: none) and (pointer: coarse) {
+  html.scroll-locked, html.scroll-locked body { overflow: hidden; overscroll-behavior: none; touch-action: none; }
+  .hint-pointer { display: none; }
+  .hint-touch { display: inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {
