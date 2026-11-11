@@ -10,6 +10,16 @@ const FALLBACK_CAROUSEL: CarouselItem[] = [
   { _type: "carouselVideo" },
 ];
 
+// Helper to convert standard YouTube links into embeddable IFRAME links
+function getYouTubeEmbedUrl(url?: string) {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11 
+    ? `https://www.youtube.com/embed/${match[2]}?rel=0&modestbranding=1` 
+    : null;
+}
+
 function CarouselSlide({ item }: { item: CarouselItem }) {
   if (item._type === "carouselImage") {
     const cls = item.aspect === "Portrait (9:16)" ? "c-img-portrait" : "c-img-landscape";
@@ -23,6 +33,7 @@ function CarouselSlide({ item }: { item: CarouselItem }) {
       </div>
     );
   }
+  
   if (item._type === "carouselText") {
     return (
       <div className="carousel-item c-text">
@@ -31,12 +42,29 @@ function CarouselSlide({ item }: { item: CarouselItem }) {
       </div>
     );
   }
-  // Video slides are not wired up yet: this is a placeholder tile.
-  return (
-    <div className="carousel-item">
-      <div className="c-img-landscape c-video">▶</div>
-    </div>
-  );
+
+  // NEW: YouTube iframe embed logic
+  if (item._type === "carouselVideo") {
+    const embedUrl = getYouTubeEmbedUrl(item.url);
+    return (
+      <div className="carousel-item">
+        {embedUrl ? (
+          <iframe 
+            className="c-img-landscape" 
+            src={embedUrl} 
+            title="YouTube video player" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowFullScreen 
+            style={{ border: 'none' }}
+          />
+        ) : (
+          <div className="c-img-landscape c-video">▶</div>
+        )}
+      </div>
+    );
+  }
+
+  return null;
 }
 
 export function ProjectCard({ project }: { project: Project }) {

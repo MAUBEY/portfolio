@@ -144,7 +144,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   background-size: cover;
   background-position: center;
   text-shadow: 0 var(--rgb-y-y) var(--rgb-y-b) rgba(255, 220, 0, var(--rgb-alpha)), 0 var(--rgb-t-y) var(--rgb-t-b) rgba(0, 200, 255, var(--rgb-alpha)), 0 var(--rgb-r-y) var(--rgb-r-b) rgba(255, 50, 0, var(--rgb-alpha)), 0 var(--rgb-b-y) var(--rgb-b-b) rgba(0, 50, 255, var(--rgb-alpha));
-  transition: color 0.3s ease, transform 0.5s ease, text-shadow 0.05s linear;
+  /* Added opacity to the transition list below */
+  transition: color 0.3s ease, transform 0.5s ease, text-shadow 0.05s linear, opacity 0.3s ease;
 }
 
 .project-card:hover .project-title, 
@@ -155,10 +156,11 @@ button, a { -webkit-tap-highlight-color: transparent; }
   -webkit-background-clip: text;
   background-clip: text;
   text-shadow: none; 
+  opacity: 0.65; /* This makes the entire title slightly see-through */
 }
 
 /* THE OBJECT */
-.project-object-mover { position: relative; z-index: 999; pointer-events: none; }
+.project-object-mover { position: relative; z-index: 4; pointer-events: none; }
 .project-object-wrap { --rx: -8deg; --ry: 12deg; width: clamp(210px, 35vw, 500px); height: clamp(210px, 35vw, 500px); display: grid; place-items: center; transform-style: preserve-3d; transform: rotateX(var(--rx)) rotateY(var(--ry)); transition: transform 0.14s ease-out; }
 .object { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, filter 0.4s ease; }
 .object img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(20px 25px 25px rgba(0,0,0,0.5)); }

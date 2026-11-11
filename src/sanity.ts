@@ -23,7 +23,7 @@ export const imgUrl = (source: SanityImage, width: number) =>
 export type CarouselItem =
   | { _type: "carouselImage"; _key?: string; image?: SanityImage; aspect?: string }
   | { _type: "carouselText"; _key?: string; heading?: string; body?: string }
-  | { _type: "carouselVideo"; _key?: string };
+  | { _type: "carouselVideo"; _key?: string; url?: string }; /* Added URL field here */
 
 export type Project = {
   _id: string;
