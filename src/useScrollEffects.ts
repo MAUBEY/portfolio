@@ -170,6 +170,7 @@ export function useScrollEffects(
       const closeCarousel = (goNext = false) => {
         const p = parts[currentIndex];
         isAnimating = true;
+        p.card.dispatchEvent(new Event("carouselclose")); // lets video slides unmount and stop playing
 
         const tl = gsap.timeline({
           onComplete: () => {

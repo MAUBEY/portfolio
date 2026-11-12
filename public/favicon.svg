@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#151512"/><text x="32" y="43" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" letter-spacing="-2" fill="#f4f3ee">E<tspan fill="#d6ff32">B</tspan></text></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64">
+  <defs>
+    <style>
+      .cls-1{fill:#151512}
+      .cls-2{font-family:Inter, sans-serif;font-size:30px;font-weight:bold;fill:#f4f3ee;letter-spacing:-2px;text-anchor:middle}
+      .cls-3{fill:#662d91}
+    </style>
+  </defs>
+  <title>favicon.svg</title>
+  <g id="Layer_1" data-name="Layer 1">
+    <path d="M14 0 L50 0 C57.732 0 64 6.268 64 14 L64 50 C64 57.732 57.732 64 50 64 L14 64 C6.268 64 0 57.732 0 50 L0 14 C0 6.268 6.268 0 14 0 Z" class="cls-1"/>
+    <text transform="matrix(1 0 0 1 32 43)" x="0" y="0" xml:space="preserve" class="cls-2"><tspan x="0" y="0">E</tspan><tspan class="cls-3">B</tspan></text>
+  </g>
+</svg>

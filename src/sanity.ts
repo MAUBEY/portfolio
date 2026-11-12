@@ -23,7 +23,8 @@ export const imgUrl = (source: SanityImage, width: number) =>
 export type CarouselItem =
   | { _type: "carouselImage"; _key?: string; image?: SanityImage; aspect?: string }
   | { _type: "carouselText"; _key?: string; heading?: string; body?: string }
-  | { _type: "carouselVideo"; _key?: string; url?: string }; /* Added URL field here */
+  // `url` is a legacy name from an earlier schema; `videoUrl` is what the Studio saves now.
+  | { _type: "carouselVideo"; _key?: string; videoUrl?: string; url?: string };
 
 export type Project = {
   _id: string;

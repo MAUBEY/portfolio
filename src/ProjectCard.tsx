@@ -1,5 +1,6 @@
 import { useRef, type CSSProperties, type MouseEvent } from "react";
 import { IMG_W, imgUrl, type CarouselItem, type Project } from "./sanity";
+import { VideoSlide } from "./VideoSlide";
 
 // Shown when a project has no carousel content in Sanity yet.
 const FALLBACK_CAROUSEL: CarouselItem[] = [
@@ -9,16 +10,6 @@ const FALLBACK_CAROUSEL: CarouselItem[] = [
   { _type: "carouselText", heading: "Technical Execution", body: "Aenean ac lectus eu nulla tincidunt sodales. Nullam ac turpis ac massa interdum ullamcorper." },
   { _type: "carouselVideo" },
 ];
-
-// Helper to convert standard YouTube links into embeddable IFRAME links
-function getYouTubeEmbedUrl(url?: string) {
-  if (!url) return null;
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.match(regExp);
-  return match && match[2].length === 11 
-    ? `https://www.youtube.com/embed/${match[2]}?rel=0&modestbranding=1` 
-    : null;
-}
 
 function CarouselSlide({ item }: { item: CarouselItem }) {
   if (item._type === "carouselImage") {
@@ -33,7 +24,7 @@ function CarouselSlide({ item }: { item: CarouselItem }) {
       </div>
     );
   }
-  
+
   if (item._type === "carouselText") {
     return (
       <div className="carousel-item c-text">
@@ -43,25 +34,8 @@ function CarouselSlide({ item }: { item: CarouselItem }) {
     );
   }
 
-  // NEW: YouTube iframe embed logic
   if (item._type === "carouselVideo") {
-    const embedUrl = getYouTubeEmbedUrl(item.url);
-    return (
-      <div className="carousel-item">
-        {embedUrl ? (
-          <iframe 
-            className="c-img-landscape" 
-            src={embedUrl} 
-            title="YouTube video player" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowFullScreen 
-            style={{ border: 'none' }}
-          />
-        ) : (
-          <div className="c-img-landscape c-video">▶</div>
-        )}
-      </div>
-    );
+    return <VideoSlide url={item.videoUrl ?? item.url} />;
   }
 
   return null;

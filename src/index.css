@@ -238,6 +238,17 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .c-video { display: grid; place-items: center; background: #111; font-size: 30px; color: #fff; }
 
+/* YouTube slide: poster -> player. The iframe never takes pointer events so wheel/touch reach the scroll handler. */
+.c-video-frame { position: relative; overflow: hidden; background: #000; }
+.c-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
+.c-video-shield { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; cursor: pointer; color: #fff; background: transparent center / cover no-repeat; }
+.c-video-shield:focus-visible { outline: 2px solid var(--accent-global); outline-offset: -4px; }
+.c-video-shield::before, .c-video-shield::after { content: ""; position: absolute; top: 50%; left: 50%; transition: opacity 0.3s ease, transform 0.3s ease; }
+.c-video-shield::after { width: 72px; height: 72px; margin: -36px 0 0 -36px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.7); background: rgba(21, 21, 18, 0.45); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.c-video-shield::before { z-index: 1; margin: -10px 0 0 -6px; border-style: solid; border-width: 10px 0 10px 17px; border-color: transparent transparent transparent #fff; }
+.c-video-shield:hover::after { transform: scale(1.08); }
+.c-video-shield[data-playing="true"]::before, .c-video-shield[data-playing="true"]::after { opacity: 0; }
+
 .project-hint { color: #777770; text-align: right; text-transform: uppercase; font-size: 9px; letter-spacing: 0.13em; }
 .hint-touch { display: none; }
 
