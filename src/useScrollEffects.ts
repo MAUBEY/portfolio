@@ -45,6 +45,7 @@ export function useScrollEffects(
         const q = (sel: string) => card.querySelector<HTMLElement>(sel)!;
         return {
           card,
+          stage: q(".project-stage"),
           title: q(".project-title-mover"),
           obj: q(".project-object-mover"),
           meta: q(".project-meta"),
@@ -161,7 +162,7 @@ export function useScrollEffects(
 
         gsap
           .timeline({ onComplete: () => (isAnimating = false) })
-          .to(p.title, { y: "-35vh", scale: 0.35, duration: 0.8, ease: SLIDE_EASE }, 0)
+          .to(p.title, { y: () => -p.stage.clientHeight / 2 - 10, scale: 0.35, duration: 0.8, ease: SLIDE_EASE }, 0) // parks just above the stage, whatever the screen height
           .to(p.obj, { opacity: 0, scale: 1.2, rotation: 15, filter: "contrast(200%) blur(10px)", duration: 0.4, ease: "power2.in" }, 0)
           .to([p.meta, p.hint], { opacity: 0, duration: 0.3 }, 0)
           .fromTo(p.carousel, { x: 100, opacity: 0 }, { x: 0, opacity: 1, pointerEvents: "auto", duration: 0.8, ease: "power3.out" }, 0.2);

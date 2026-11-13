@@ -1,4 +1,4 @@
-import { useRef, type MouseEvent } from "react";
+import { useLayoutEffect, useRef, type MouseEvent } from "react";
 import { IMG_W, imgUrl, type CarouselItem, type Project } from "./sanity";
 import { VideoSlide } from "./VideoSlide";
 
@@ -10,6 +10,50 @@ const FALLBACK_CAROUSEL: CarouselItem[] = [
   { _type: "carouselText", heading: "Technical Execution", body: "Aenean ac lectus eu nulla tincidunt sodales. Nullam ac turpis ac massa interdum ullamcorper." },
   { _type: "carouselVideo" },
 ];
+
+const MIN_TEXT_PX = 11;
+
+/**
+ * Text slide. The panel is exactly as tall as the media beside it, so if the copy is longer than the space allows
+ * (small screen, long text) the type shrinks in half-pixel steps until it fits, instead of being cut off.
+ */
+function TextSlide({ heading, body }: { heading?: string; body?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    const para = el?.querySelector("p");
+    if (!el || !para) return;
+
+    const overflows = () => {
+      const cs = getComputedStyle(el);
+      const limit = el.getBoundingClientRect().bottom - parseFloat(cs.borderBottomWidth) - parseFloat(cs.paddingBottom);
+      return para.getBoundingClientRect().bottom > limit + 0.5;
+    };
+
+    const fit = () => {
+      el.style.fontSize = "";
+      let size = parseFloat(getComputedStyle(el).fontSize);
+      while (overflows() && size > MIN_TEXT_PX) {
+        size -= 0.5;
+        el.style.fontSize = `${size}px`;
+      }
+    };
+
+    fit();
+    const ro = new ResizeObserver(fit); // window resized / device rotated
+    ro.observe(el);
+    document.fonts?.ready.then(fit); // web fonts change text metrics once loaded
+    return () => ro.disconnect();
+  }, [heading, body]);
+
+  return (
+    <div className="carousel-item c-text" ref={ref}>
+      <h4>{heading || "Details"}</h4>
+      <p>{body || "Lorem ipsum dolor sit amet."}</p>
+    </div>
+  );
+}
 
 function CarouselSlide({ item }: { item: CarouselItem }) {
   if (item._type === "carouselImage") {
@@ -26,12 +70,7 @@ function CarouselSlide({ item }: { item: CarouselItem }) {
   }
 
   if (item._type === "carouselText") {
-    return (
-      <div className="carousel-item c-text">
-        <h4>{item.heading || "Details"}</h4>
-        <p>{item.body || "Lorem ipsum dolor sit amet."}</p>
-      </div>
-    );
+    return <TextSlide heading={item.heading} body={item.body} />;
   }
 
   if (item._type === "carouselVideo") {
