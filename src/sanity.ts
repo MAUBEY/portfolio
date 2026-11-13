@@ -14,7 +14,7 @@ const builder = imageUrlBuilder(client);
 export type SanityImage = any;
 
 /** Widths used across the site. Preloading and rendering share these so the browser reuses the cached file. */
-export const IMG_W = { hero: 800, object: 1000, matte: 1600, carousel: 1600, service: 1000, portrait: 1200 };
+export const IMG_W = { hero: 800, object: 1000, carousel: 1600, service: 1000, portrait: 1200 };
 
 /** Resized, never upscaled, and served as WebP/AVIF where supported. */
 export const imgUrl = (source: SanityImage, width: number) =>
@@ -32,9 +32,7 @@ export type Project = {
   title: string;
   category: string;
   year: string;
-  accent?: string;
   objectImage?: SanityImage;
-  hoverMatteImage?: SanityImage;
   carouselItems?: CarouselItem[];
 };
 
@@ -52,7 +50,7 @@ export type HeroSection = {
 export type ContactSection = {
   email?: string;
   image?: SanityImage;
-  sticker?: string;
+  introSentence?: string;
   kicker?: string;
   heading1?: string;
   heading2?: string;
@@ -74,6 +72,7 @@ export type SiteSettings = {
   titleFont?: string;
   bodyFont?: string;
   resumeUrl?: string;
+  resumeUrlFr?: string;
 };
 
 export type SiteData = {
@@ -101,7 +100,7 @@ export async function fetchSiteData(): Promise<SiteData> {
     client.fetch<Service[]>('*[_type == "service"] | order(order asc)'),
     client.fetch<HeroSection | null>('*[_type == "heroSection"][0]'),
     client.fetch<ContactSection | null>('*[_type == "contactSection"][0]'),
-    client.fetch<SiteSettings | null>('*[_type == "siteSettings"][0]{..., "resumeUrl": resumePdf.asset->url}'),
+    client.fetch<SiteSettings | null>('*[_type == "siteSettings"][0]{..., "resumeUrl": resumePdf.asset->url, "resumeUrlFr": resumePdfFr.asset->url}'),
   ]);
   return { projects, experience, services, hero, contact, site };
 }

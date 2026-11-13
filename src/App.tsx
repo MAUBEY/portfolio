@@ -3,11 +3,14 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { EMPTY_SITE_DATA, IMG_W, fetchSiteData, imgUrl, type SiteData, type SiteSettings } from "./sanity";
 import { ProjectCard } from "./ProjectCard";
+import { EmailLink, cleanEmail } from "./EmailLink";
 import { useScrollEffects } from "./useScrollEffects";
 
 gsap.registerPlugin(useGSAP);
 
 const COUNTER = Array.from({ length: 101 }, (_, i) => String(i).padStart(3, "0"));
+const DEFAULT_INTRO =
+  "My practice moves between strategy, identity, interaction and art direction. I like small teams, ambitious ideas, and work that earns a place in culture.";
 const PRELOAD_TIMEOUT_MS = 6000; // never hold the splash screen longer than this on a slow connection
 
 function Arrow({ diagonal = false }: { diagonal?: boolean }) {
@@ -124,8 +127,9 @@ export default function App() {
 
   const { projects, experience, services, hero, contact, site } = data;
   const initials = site?.logoInitials || "AR";
-  const email = contact?.email || "hello@example.com";
-  const mailto = `mailto:${email}`;
+  const email = cleanEmail(contact?.email) || "hello@example.com";
+  const resumeEn = site?.resumeUrl;
+  const resumeFr = site?.resumeUrlFr;
 
   return (
     <main ref={mainRef}>
@@ -157,9 +161,9 @@ export default function App() {
           <a href="#about">{site?.navTab2 || "About"}</a>
           <a href="#contact">{site?.navTab3 || "Contact"}</a>
         </div>
-        <a className="availability" href={mailto}>
-          <span /> Available for projects
-        </a>
+        <EmailLink className="availability" email={email}>
+          <span className="availability-dot" /> Available for projects
+        </EmailLink>
       </nav>
 
       <header className="hero" id="top">
@@ -255,17 +259,30 @@ export default function App() {
           ))}
         </div>
         <div className="resume-foot">
-          <p>My practice moves between strategy, identity, interaction and art direction. I like small teams, ambitious ideas, and work that earns a place in culture.</p>
-          <a href={site?.resumeUrl || "#"} target="_blank" rel="noreferrer" download>
-            Download full résumé <Arrow diagonal />
-          </a>
+          <p>{contact?.introSentence || DEFAULT_INTRO}</p>
+          {(resumeEn || resumeFr) && (
+            <div className="resume-downloads">
+              <span className="resume-downloads-label">Download résumé</span>
+              <div className="resume-downloads-links">
+                {resumeEn && (
+                  <a href={resumeEn} target="_blank" rel="noreferrer" lang="en">
+                    English <Arrow diagonal />
+                  </a>
+                )}
+                {resumeFr && (
+                  <a href={resumeFr} target="_blank" rel="noreferrer" lang="fr">
+                    Français <Arrow diagonal />
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
       <section className="contact" id="contact">
         <div className="portrait-wrap">
           {contact?.image && <img src={imgUrl(contact.image, IMG_W.portrait)} alt="Portrait" loading="lazy" decoding="async" />}
-          <div className="portrait-sticker">{contact?.sticker || "Hello!"}</div>
         </div>
         <div className="contact-copy">
           <span className="contact-kicker">{contact?.kicker || "Have a project in mind?"}</span>
@@ -274,9 +291,9 @@ export default function App() {
             <br />
             <em>{contact?.heading2 || "something good."}</em>
           </h2>
-          <a className="email-link" href={mailto}>
+          <EmailLink className="email-link" email={email}>
             {email} <Arrow diagonal />
-          </a>
+          </EmailLink>
           <div className="socials">
             {contact?.socials?.map((s) => (
               <a key={s._key} href={s.url} target="_blank" rel="noreferrer">

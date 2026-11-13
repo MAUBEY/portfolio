@@ -1,4 +1,4 @@
-import { useRef, type CSSProperties, type MouseEvent } from "react";
+import { useRef, type MouseEvent } from "react";
 import { IMG_W, imgUrl, type CarouselItem, type Project } from "./sanity";
 import { VideoSlide } from "./VideoSlide";
 
@@ -62,12 +62,6 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <article
       className="project-card"
-      style={
-        {
-          "--accent": project.accent || "var(--accent-global)",
-          "--thumb-url": project.hoverMatteImage ? `url(${imgUrl(project.hoverMatteImage, IMG_W.matte)})` : "none",
-        } as CSSProperties
-      }
       onMouseMove={tilt}
       onMouseLeave={resetTilt}
       tabIndex={0}
